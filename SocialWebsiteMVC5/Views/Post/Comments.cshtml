@@ -1,0 +1,20 @@
+﻿@model SocialWebsiteMVC5.CommentsAndPostID
+
+
+<table class="table">
+    
+@foreach (var item in Model.comments) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CommentContent)
+        </td>
+        <td>
+            @Html.ActionLink(item.Account.FullName, "Index/" + item.Account.UserName, "Profile")
+        </td>
+        
+    </tr>
+}
+    
+</table>
+
+@Html.Action("_comment", "Post", new { id = Model.PostId })

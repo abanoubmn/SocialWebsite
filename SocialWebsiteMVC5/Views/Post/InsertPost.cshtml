@@ -1,0 +1,55 @@
+﻿@model SocialWebsiteMVC5.InsertPost_Result
+@using System.Security.Claims
+
+@{
+    var id = Guid.Parse(((ClaimsIdentity)User.Identity).FindFirst("id").Value);
+    var count = Html.Action("LikeCount", "Post", new { id = Model.PostID }).ToString();
+    <div class="panel panel-default" id="@Model.PostID" data-toggle="modal" data-target="#myModal" style="cursor:pointer" onclick="loadajax(@Model.PostID)">
+        <div class="panel-body">
+            <div class="media">
+                <div class="media-left">
+                    <a href="@Url.Action("Index/" + Model.UserName, "Profile")">
+                        @Html.Action("_ProfilePicture", "Home", new { id = Model.AccountID.ToString() })
+                    </a>
+                </div>
+                <div class="media-body">
+
+                    <h4 class="media-heading">
+                        @Html.ActionLink(Model.FullName, "Index/" + Model.UserName, "Profile")
+                    </h4>
+
+                    <div class="post" id="@String.Concat("postcontent",Model.PostID)">@Html.DisplayFor(modelItem => Model.PostContent)</div>
+
+                    <div class="well-sm">
+                        @Html.DisplayFor(modelItem => Model.DateCreated) |
+                        @if (Html.Action("CheckLike", "Post", new { id = Model.PostID }).ToString() == "1")
+                        {
+                            <a href="#" id="@String.Concat("likes",Model.PostID)" onclick="unlike(@Model.PostID)">Unlike</a>
+                        }
+                        else
+                        {
+                            <a href="#" id="@String.Concat("likes",Model.PostID)" onclick="like(@Model.PostID)">Like</a>
+                        }
+
+                        <span id="@String.Concat("likescount",Model.PostID)" class="badge">@if (count != "0")
+                        {@count}</span>
+
+                        @if (Model.AccountID == id)
+                        {
+                            <a href="#" onclick="editpost(@Model.PostID)">Edit</a>
+                            @Html.Raw(" | ")
+                            <a href="#" onclick="showdeletemodal(@Model.PostID)">Delete</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $("a").on("click", function (e) {
+        if (e.target.className != "dropdown-toggle") {
+            e.stopPropagation();
+        }
+    });
+</script>

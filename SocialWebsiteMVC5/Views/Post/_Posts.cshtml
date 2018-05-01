@@ -1,0 +1,48 @@
+﻿@model System.Data.Entity.Core.Objects.ObjectResult<GetAllPosts_Result>
+@using System.Security.Claims
+
+@foreach (var item in Model)
+{
+    var id = Guid.Parse(((ClaimsIdentity)User.Identity).FindFirst("id").Value);
+    var count = Html.Action("LikeCount", "Post", new { id = item.PostID }).ToString();
+    <div class="panel panel-default" id="@item.PostID" data-toggle="modal" data-target="#myModal" style="cursor:pointer" onclick="loadajax(@item.PostID)">
+        <div class="panel-body">
+            <div class="media">
+                <div class="media-left">
+                    <a href="@Url.Action("Index/" + item.UserName, "Profile")">
+                        @Html.Action("_ProfilePicture", "Home", new { id = item.AccountID.ToString() })
+                    </a>
+                </div>
+                <div class="media-body">
+
+                    <h4 class="media-heading">
+                        @Html.ActionLink(item.FullName, "Index/" + item.UserName, "Profile")
+                    </h4>
+
+                    <div class="post" id="@String.Concat("postcontent",item.PostID)">@Html.DisplayFor(modelItem => item.PostContent)</div>
+
+                    <div class="well-sm">
+                        @Html.DisplayFor(modelItem => item.DateCreated) |
+                        @if (Html.Action("CheckLike", "Post", new { id = item.PostID }).ToString() == "1")
+                        {
+                            <a href="#" id="@String.Concat("likes",item.PostID)" onclick="unlike(@item.PostID)">Unlike</a>
+                        }
+                        else
+                        {
+                            <a href="#" id="@String.Concat("likes",item.PostID)" onclick="like(@item.PostID)">Like</a>
+                        }
+
+                        <span id="@String.Concat("likescount",item.PostID)" class="badge">@if (count != "0"){@count}</span>
+                            
+                    @if (item.AccountID == id)
+                {
+                        <a href="#" onclick="editpost(@item.PostID)">Edit</a>
+                                @Html.Raw(" | ")
+                                <a href="#" onclick="showdeletemodal(@item.PostID)">Delete</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}

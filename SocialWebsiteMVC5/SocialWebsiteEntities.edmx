@@ -1,0 +1,818 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SocialWebsiteModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Role" Type="nchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="CommentID" />
+          </Key>
+          <Property Name="CommenterID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CommentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CommentContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PostID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Friend">
+          <Key>
+            <PropertyRef Name="Friend1" />
+            <PropertyRef Name="Friend2" />
+          </Key>
+          <Property Name="RelationshipID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Friend1" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Friend2" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="PostID" />
+          </Key>
+          <Property Name="AccountID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PostID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PostContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PostLike">
+          <Key>
+            <PropertyRef Name="AccountID" />
+            <PropertyRef Name="PostID" />
+          </Key>
+          <Property Name="AccountID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PostID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProfilePicture">
+          <Key>
+            <PropertyRef Name="AccountID" />
+          </Key>
+          <Property Name="ImageURL" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="AccountID" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Request">
+          <Key>
+            <PropertyRef Name="Requested" />
+            <PropertyRef Name="Requester" />
+          </Key>
+          <Property Name="RequestID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Requested" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Requester" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Comment_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="CommenterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_Post">
+          <End Role="Post" Type="Self.Post" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="PostID" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="PostID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Friend_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Friend" Type="Self.Friend" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Friend">
+              <PropertyRef Name="Friend1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Friend_Account1">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Friend" Type="Self.Friend" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Friend">
+              <PropertyRef Name="Friend2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostLike_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="PostLike" Type="Self.PostLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PostLike">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostLike_Post">
+          <End Role="Post" Type="Self.Post" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PostLike" Type="Self.PostLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="PostID" />
+            </Principal>
+            <Dependent Role="PostLike">
+              <PropertyRef Name="PostID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProfilePicture_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="ProfilePicture" Type="Self.ProfilePicture" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProfilePicture">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="Requested" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Account1">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="Requester" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AcceptRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="requestedId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="requesterUsername" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="CheckLike" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="accountId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="postId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteLike" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="accountId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="postId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeletePost" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="postId" Type="int" Mode="In" />
+          <Parameter Name="accountId" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="EditPost" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="postId" Type="int" Mode="In" />
+          <Parameter Name="accountId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="postContent" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="GetAllPosts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="GetComments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="postId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetFriendList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="accountId" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="GetLikers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="postId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetProfileData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="InsertLike" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="accountId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="postId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="InsertPost" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="accountId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="content" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="dateCreate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="LikesCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="postId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RejectRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="requestedId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="requesterUsername" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SearchAccounts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <EntityContainer Name="SocialWebsiteModelStoreContainer">
+          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Friend" EntityType="Self.Friend" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Post" EntityType="Self.Post" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PostLike" EntityType="Self.PostLike" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProfilePicture" EntityType="Self.ProfilePicture" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Request" EntityType="Self.Request" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Comment_Account" Association="Self.FK_Comment_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_Post" Association="Self.FK_Comment_Post">
+            <End Role="Post" EntitySet="Post" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Friend_Account" Association="Self.FK_Friend_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Friend" EntitySet="Friend" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Friend_Account1" Association="Self.FK_Friend_Account1">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Friend" EntitySet="Friend" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_Account" Association="Self.FK_Post_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostLike_Account" Association="Self.FK_PostLike_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="PostLike" EntitySet="PostLike" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostLike_Post" Association="Self.FK_PostLike_Post">
+            <End Role="Post" EntitySet="Post" />
+            <End Role="PostLike" EntitySet="PostLike" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProfilePicture_Account" Association="Self.FK_ProfilePicture_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="ProfilePicture" EntitySet="ProfilePicture" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Account" Association="Self.FK_Request_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Request" EntitySet="Request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Account1" Association="Self.FK_Request_Account1">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Request" EntitySet="Request" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SocialWebsiteModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Comments" Relationship="Self.FK_Comment_Account" FromRole="Account" ToRole="Comment" />
+          <NavigationProperty Name="Friends" Relationship="Self.FK_Friend_Account" FromRole="Account" ToRole="Friend" />
+          <NavigationProperty Name="Friends1" Relationship="Self.FK_Friend_Account1" FromRole="Account" ToRole="Friend" />
+          <NavigationProperty Name="Posts" Relationship="Self.FK_Post_Account" FromRole="Account" ToRole="Post" />
+          <NavigationProperty Name="ProfilePicture" Relationship="Self.FK_ProfilePicture_Account" FromRole="Account" ToRole="ProfilePicture" />
+          <NavigationProperty Name="Requests" Relationship="Self.FK_Request_Account" FromRole="Account" ToRole="Request" />
+          <NavigationProperty Name="Requests1" Relationship="Self.FK_Request_Account1" FromRole="Account" ToRole="Request" />
+          <NavigationProperty Name="Posts1" Relationship="Self.PostLike" FromRole="Account" ToRole="Post" />
+        </EntityType>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="CommentID" />
+          </Key>
+          <Property Name="CommenterID" Type="Guid" Nullable="false" />
+          <Property Name="CommentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CommentContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PostID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Comment_Account" FromRole="Comment" ToRole="Account" />
+          <NavigationProperty Name="Post" Relationship="Self.FK_Comment_Post" FromRole="Comment" ToRole="Post" />
+        </EntityType>
+        <EntityType Name="Friend">
+          <Key>
+            <PropertyRef Name="Friend1" />
+            <PropertyRef Name="Friend2" />
+          </Key>
+          <Property Name="RelationshipID" Type="Guid" Nullable="false" />
+          <Property Name="Friend1" Type="Guid" Nullable="false" />
+          <Property Name="Friend2" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Friend_Account" FromRole="Friend" ToRole="Account" />
+          <NavigationProperty Name="Account1" Relationship="Self.FK_Friend_Account1" FromRole="Friend" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="PostID" />
+          </Key>
+          <Property Name="AccountID" Type="Guid" Nullable="false" />
+          <Property Name="PostID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PostContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Post_Account" FromRole="Post" ToRole="Account" />
+          <NavigationProperty Name="Comments" Relationship="Self.FK_Comment_Post" FromRole="Post" ToRole="Comment" />
+          <NavigationProperty Name="Accounts" Relationship="Self.PostLike" FromRole="Post" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="ProfilePicture">
+          <Key>
+            <PropertyRef Name="AccountID" />
+          </Key>
+          <Property Name="ImageURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AccountID" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_ProfilePicture_Account" FromRole="ProfilePicture" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="Request">
+          <Key>
+            <PropertyRef Name="Requested" />
+            <PropertyRef Name="Requester" />
+          </Key>
+          <Property Name="RequestID" Type="Guid" Nullable="false" />
+          <Property Name="Requested" Type="Guid" Nullable="false" />
+          <Property Name="Requester" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Request_Account" FromRole="Request" ToRole="Account" />
+          <NavigationProperty Name="Account1" Relationship="Self.FK_Request_Account1" FromRole="Request" ToRole="Account" />
+        </EntityType>
+        <Association Name="FK_Comment_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="CommenterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Friend_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Friend" Type="Self.Friend" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Friend">
+              <PropertyRef Name="Friend1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Friend_Account1">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Friend" Type="Self.Friend" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Friend">
+              <PropertyRef Name="Friend2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProfilePicture_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="ProfilePicture" Type="Self.ProfilePicture" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProfilePicture">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="Requested" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Account1">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="Requester" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_Post">
+          <End Role="Post" Type="Self.Post" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="PostID" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="PostID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PostLike">
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="SocialWebsiteEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="Self.Account" />
+          <EntitySet Name="Comments" EntityType="Self.Comment" />
+          <EntitySet Name="Friends" EntityType="Self.Friend" />
+          <EntitySet Name="Posts" EntityType="Self.Post" />
+          <EntitySet Name="ProfilePictures" EntityType="Self.ProfilePicture" />
+          <EntitySet Name="Requests" EntityType="Self.Request" />
+          <AssociationSet Name="FK_Comment_Account" Association="Self.FK_Comment_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Friend_Account" Association="Self.FK_Friend_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Friend" EntitySet="Friends" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Friend_Account1" Association="Self.FK_Friend_Account1">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Friend" EntitySet="Friends" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_Account" Association="Self.FK_Post_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProfilePicture_Account" Association="Self.FK_ProfilePicture_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="ProfilePicture" EntitySet="ProfilePictures" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Account" Association="Self.FK_Request_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Request" EntitySet="Requests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Account1" Association="Self.FK_Request_Account1">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Request" EntitySet="Requests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_Post" Association="Self.FK_Comment_Post">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="PostLike" Association="Self.PostLike">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <FunctionImport Name="AcceptRequest">
+            <Parameter Name="requestedId" Mode="In" Type="Guid" />
+            <Parameter Name="requesterUsername" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CheckLike" ReturnType="Collection(Int32)">
+            <Parameter Name="accountId" Mode="In" Type="Guid" />
+            <Parameter Name="postId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteLike">
+            <Parameter Name="accountId" Mode="In" Type="Guid" />
+            <Parameter Name="postId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeletePost">
+            <Parameter Name="postId" Mode="In" Type="Int32" />
+            <Parameter Name="accountId" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="EditPost">
+            <Parameter Name="postId" Mode="In" Type="Int32" />
+            <Parameter Name="accountId" Mode="In" Type="Guid" />
+            <Parameter Name="postContent" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetAllPosts" ReturnType="Collection(SocialWebsiteModel.GetAllPosts_Result)">
+            <Parameter Name="id" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="GetComments" ReturnType="Collection(SocialWebsiteModel.GetComments_Result)">
+            <Parameter Name="postId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetFriendList" ReturnType="Collection(SocialWebsiteModel.GetFriendList_Result)">
+            <Parameter Name="accountId" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="GetLikers" ReturnType="Collection(SocialWebsiteModel.GetLikers_Result)">
+            <Parameter Name="postId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetProfileData" ReturnType="Collection(SocialWebsiteModel.GetProfileData_Result)">
+            <Parameter Name="id" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="InsertLike">
+            <Parameter Name="accountId" Mode="In" Type="Guid" />
+            <Parameter Name="postId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="InsertPost" ReturnType="Collection(SocialWebsiteModel.InsertPost_Result)">
+            <Parameter Name="accountId" Mode="In" Type="Guid" />
+            <Parameter Name="content" Mode="In" Type="String" />
+            <Parameter Name="dateCreate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="LikesCount" ReturnType="Collection(Int32)">
+            <Parameter Name="postId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="RejectRequest">
+            <Parameter Name="requestedId" Mode="In" Type="Guid" />
+            <Parameter Name="requesterUsername" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SearchAccounts" ReturnType="Collection(SocialWebsiteModel.SearchAccounts_Result)">
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="id" Mode="In" Type="Guid" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="GetAllPosts_Result">
+          <Property Type="Guid" Name="AccountID" Nullable="true" />
+          <Property Type="Int32" Name="PostID" Nullable="true" />
+          <Property Type="String" Name="PostContent" Nullable="true" />
+          <Property Type="DateTime" Name="DateCreated" Nullable="true" Precision="23" />
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ImageURL" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetComments_Result">
+          <Property Type="Guid" Name="CommenterID" Nullable="true" />
+          <Property Type="Int32" Name="CommentID" Nullable="true" />
+          <Property Type="String" Name="CommentContent" Nullable="true" />
+          <Property Type="Int32" Name="PostID" Nullable="true" />
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ImageURL" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetFriendList_Result">
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GetLikers_Result">
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GetProfileData_Result">
+          <Property Type="Guid" Name="AccountID" Nullable="true" />
+          <Property Type="Int32" Name="PostID" Nullable="true" />
+          <Property Type="String" Name="PostContent" Nullable="true" />
+          <Property Type="DateTime" Name="DateCreated" Nullable="true" Precision="23" />
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ImageURL" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="InsertPost_Result">
+          <Property Type="Guid" Name="AccountID" Nullable="true" />
+          <Property Type="Int32" Name="PostID" Nullable="true" />
+          <Property Type="String" Name="PostContent" Nullable="true" />
+          <Property Type="DateTime" Name="DateCreated" Nullable="true" Precision="23" />
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ImageURL" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SearchAccounts_Result">
+          <Property Type="String" Name="FullName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="50" />
+          <Property Type="Guid" Name="ID" Nullable="false" />
+          <Property Type="String" Name="ImageURL" Nullable="true" />
+          <Property Type="Guid" Name="RelationshipID" Nullable="true" />
+          <Property Type="Guid" Name="RequestID" Nullable="true" />
+          <Property Type="Guid" Name="Requested" Nullable="true" />
+          <Property Type="Guid" Name="Requester" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SocialWebsiteModelStoreContainer" CdmEntityContainer="SocialWebsiteEntities">
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="SocialWebsiteModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comments">
+            <EntityTypeMapping TypeName="SocialWebsiteModel.Comment">
+              <MappingFragment StoreEntitySet="Comment">
+                <ScalarProperty Name="CommenterID" ColumnName="CommenterID" />
+                <ScalarProperty Name="CommentID" ColumnName="CommentID" />
+                <ScalarProperty Name="CommentContent" ColumnName="CommentContent" />
+                <ScalarProperty Name="PostID" ColumnName="PostID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Friends">
+            <EntityTypeMapping TypeName="SocialWebsiteModel.Friend">
+              <MappingFragment StoreEntitySet="Friend">
+                <ScalarProperty Name="RelationshipID" ColumnName="RelationshipID" />
+                <ScalarProperty Name="Friend1" ColumnName="Friend1" />
+                <ScalarProperty Name="Friend2" ColumnName="Friend2" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Posts">
+            <EntityTypeMapping TypeName="SocialWebsiteModel.Post">
+              <MappingFragment StoreEntitySet="Post">
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="PostID" ColumnName="PostID" />
+                <ScalarProperty Name="PostContent" ColumnName="PostContent" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProfilePictures">
+            <EntityTypeMapping TypeName="SocialWebsiteModel.ProfilePicture">
+              <MappingFragment StoreEntitySet="ProfilePicture">
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Requests">
+            <EntityTypeMapping TypeName="SocialWebsiteModel.Request">
+              <MappingFragment StoreEntitySet="Request">
+                <ScalarProperty Name="RequestID" ColumnName="RequestID" />
+                <ScalarProperty Name="Requested" ColumnName="Requested" />
+                <ScalarProperty Name="Requester" ColumnName="Requester" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="PostLike" TypeName="SocialWebsiteModel.PostLike" StoreEntitySet="PostLike">
+            <EndProperty Name="Account">
+              <ScalarProperty Name="ID" ColumnName="AccountID" />
+            </EndProperty>
+            <EndProperty Name="Post">
+              <ScalarProperty Name="PostID" ColumnName="PostID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="AcceptRequest" FunctionName="SocialWebsiteModel.Store.AcceptRequest" />
+          <FunctionImportMapping FunctionImportName="CheckLike" FunctionName="SocialWebsiteModel.Store.CheckLike" />
+          <FunctionImportMapping FunctionImportName="DeleteLike" FunctionName="SocialWebsiteModel.Store.DeleteLike" />
+          <FunctionImportMapping FunctionImportName="DeletePost" FunctionName="SocialWebsiteModel.Store.DeletePost" />
+          <FunctionImportMapping FunctionImportName="EditPost" FunctionName="SocialWebsiteModel.Store.EditPost" />
+          <FunctionImportMapping FunctionImportName="GetAllPosts" FunctionName="SocialWebsiteModel.Store.GetAllPosts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SocialWebsiteModel.GetAllPosts_Result">
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="PostID" ColumnName="PostID" />
+                <ScalarProperty Name="PostContent" ColumnName="PostContent" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetComments" FunctionName="SocialWebsiteModel.Store.GetComments">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SocialWebsiteModel.GetComments_Result">
+                <ScalarProperty Name="CommenterID" ColumnName="CommenterID" />
+                <ScalarProperty Name="CommentID" ColumnName="CommentID" />
+                <ScalarProperty Name="CommentContent" ColumnName="CommentContent" />
+                <ScalarProperty Name="PostID" ColumnName="PostID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetFriendList" FunctionName="SocialWebsiteModel.Store.GetFriendList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SocialWebsiteModel.GetFriendList_Result">
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetLikers" FunctionName="SocialWebsiteModel.Store.GetLikers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SocialWebsiteModel.GetLikers_Result">
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProfileData" FunctionName="SocialWebsiteModel.Store.GetProfileData">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SocialWebsiteModel.GetProfileData_Result">
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="PostID" ColumnName="PostID" />
+                <ScalarProperty Name="PostContent" ColumnName="PostContent" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="InsertLike" FunctionName="SocialWebsiteModel.Store.InsertLike" />
+          <FunctionImportMapping FunctionImportName="InsertPost" FunctionName="SocialWebsiteModel.Store.InsertPost">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SocialWebsiteModel.InsertPost_Result">
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="PostID" ColumnName="PostID" />
+                <ScalarProperty Name="PostContent" ColumnName="PostContent" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="LikesCount" FunctionName="SocialWebsiteModel.Store.LikesCount" />
+          <FunctionImportMapping FunctionImportName="RejectRequest" FunctionName="SocialWebsiteModel.Store.RejectRequest" />
+          <FunctionImportMapping FunctionImportName="SearchAccounts" FunctionName="SocialWebsiteModel.Store.SearchAccounts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SocialWebsiteModel.SearchAccounts_Result">
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+                <ScalarProperty Name="RelationshipID" ColumnName="RelationshipID" />
+                <ScalarProperty Name="RequestID" ColumnName="RequestID" />
+                <ScalarProperty Name="Requested" ColumnName="Requested" />
+                <ScalarProperty Name="Requester" ColumnName="Requester" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

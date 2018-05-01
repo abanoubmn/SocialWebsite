@@ -1,0 +1,21 @@
+﻿@model IEnumerable<SocialWebsiteMVC5.Request>
+
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Requests 
+    @if (Model.Count() > 0)
+    {
+        <span class="badge">
+            @Model.Count()
+        </span>
+    }
+    <span class="caret">
+             </span></a>
+<ul class="dropdown-menu">
+    @foreach (var item in Model)
+    {
+        <li>
+            @Html.ActionLink(item.Account1.FullName, "Index/" + item.Account1.UserName, "Profile") 
+            <h6 class="@String.Concat("request",item.Account1.UserName)"><a href="#" onclick="acceptrequest('@item.Account1.UserName')">Accept</a> <a href="#" onclick="rejectrequest('@item.Account1.UserName')">Reject</a>
+            </h6>
+        </li><li role="separator" class="divider"></li>
+    }
+</ul>

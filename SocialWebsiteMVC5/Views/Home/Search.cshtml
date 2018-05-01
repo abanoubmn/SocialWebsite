@@ -1,0 +1,62 @@
+﻿@model System.Data.Entity.Core.Objects.ObjectResult<SearchAccounts_Result>
+@using System.Security.Claims
+@{
+    ViewBag.Title = "Search";
+}
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <img class="img-rounded" src="@item.ImageURL" height="200" width="200">
+                <div class="caption">
+                    <h3>@Html.ActionLink(item.FullName, "Index/" + item.UserName, "Profile")</h3>
+                    <p></p>
+                    @if (item.RelationshipID == null && item.RequestID == null)
+                    {
+                        <p id="@item.UserName"><a href="#" class="btn btn-default" onclick="sendRequest('@item.UserName')" role="button">Add</a> </p>
+                    }
+                    else if (item.RelationshipID == null && item.RequestID != null)
+                    {
+                        var id = Guid.Parse(((ClaimsIdentity)User.Identity).FindFirst("id").Value);
+                        if (item.Requester == id)
+                        {
+                            <p> @Html.Raw("You sent a friend request.") </p>
+                        }
+                        else
+                        {
+                            <p> @Html.Raw(item.FullName+" sent a friend request.") </p>
+                        }
+
+                    }
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script>
+
+
+            //$(document).on("click", function (e) {
+            //    var elem = e.target;
+            //    if (elem.nodeName == 'A') {
+            //        var p = elem.parentElement;
+            //        $.ajax({
+            //            url: "/Profile/Add/",
+            //            type: "Post",
+            //            data: {
+            //                RequestedUsername: p.id
+            //            }
+            //        }).done(function (result) {
+            //            if (result == "succeeded") {
+            //                $("#" + p.id).html("Friend request was sent successfully!")
+            //            }
+            //            else if (result == "failed") {
+            //                $("#" + p.id).html("Friend request failed!")
+            //            }
+            //        })
+            //    }
+            //});
+</script>

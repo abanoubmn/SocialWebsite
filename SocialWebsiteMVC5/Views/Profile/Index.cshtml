@@ -1,0 +1,192 @@
+﻿@model SocialWebsiteMVC5.PostsAndProfilePicture
+@using System.Security.Claims
+@{
+    ViewBag.Title = Model.FullName;
+}
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Comments</h4>
+            </div>
+            <div class="modal-body" id="commentmodalbody">
+
+            </div>
+            @*@Html.Partial("_comment", new Comment())*@
+            @*<div class="modal-footer">
+
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>*@
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Are you sure you want to delete this post?</h4>
+            </div>
+            <div class="modal-body" id="deletemodalbody">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="~/Content/jquery.fileupload.css" rel="stylesheet" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="~/Scripts/jquery.iframe-transport.js"></script>
+<script src="~/Scripts/jquery.ui.widget.js"></script>
+<script src="~/Scripts/jquery.fileupload.js"></script>
+
+<div class="modal fade" id="updateppmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Update Profile Picture</h4>
+            </div>
+            <div class="modal-body" id="deletemodalbody">
+                <form id="fileupload" action="@Url.Action("UpdatePP")" method="POST" enctype="multipart/form-data">
+
+                    <span class="btn btn-success fileinput-button">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span>Add file</span>
+                        <input type="file" name="files[]" accept="image/*">
+                    </span>
+                    <button type="submit" class="btn btn-primary start">
+                        <i class="glyphicon glyphicon-upload"></i>
+                        <span>Upload</span>
+                    </button>
+                    <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+                </form>
+                <script id="template-upload" type="text/x-tmpl">
+                    {% for (var i=0, file; file=o.files[i]; i++) { %}
+                    <tr class="template-upload fade">
+                        <td>
+                            <span class="preview"></span>
+                        </td>
+                        <td>
+                            <p class="name">{%=file.name%}</p>
+                            <strong class="error text-danger"></strong>
+                        </td>
+                        <td>
+                            <p class="size">Processing...</p>
+                            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+                        </td>
+                        <td>
+                            {% if (!i && !o.options.autoUpload) { %}
+                            <button class="btn btn-primary start" disabled>
+                                <i class="glyphicon glyphicon-upload"></i>
+                                <span>Start</span>
+                            </button>
+                            {% } %}
+                            {% if (!i) { %}
+                            <button class="btn btn-warning cancel">
+                                <i class="glyphicon glyphicon-ban-circle"></i>
+                                <span>Cancel</span>
+                            </button>
+                            {% } %}
+                        </td>
+                    </tr>
+                    {% } %}
+                </script>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        @if (Model.PP != null)
+        {
+            var id = Guid.Parse(((ClaimsIdentity)User.Identity).FindFirst("id").Value);
+            <img src="@Model.PP.ImageURL" height="150" width="150" class="img-thumbnail" />
+            @Html.Raw("&nbsp; &nbsp;")
+
+            if (Model.AccountID == id)
+            {
+                <p><a href="#" class="btn btn-primary" role="button" onclick="showPPmodal()">Update profile picture</a> <a href="#" class="btn btn-default" role="button">Delete profile picture</a></p>
+            }
+        }
+        else
+        {
+            var id = Guid.Parse(((ClaimsIdentity)User.Identity).FindFirst("id").Value);
+            <img src="~/images/empty.gif" height="150" width="150" />
+            @Html.Raw("&nbsp; &nbsp;")
+
+            if (Model.AccountID == id)
+            {
+                <p><a href="#" class="btn btn-primary" role="button" onclick="showPPmodal()">Update profile picture</a></p>
+            }
+        }
+        @if (Model.FriendsWith == false && Model.Requested == false && Model.Requester == false)
+        {
+            <p id="@Model.UserName"><a href="#" class="btn btn-default" onclick="sendRequest('@Model.UserName')" role="button">Add</a> </p>
+        }
+        else if (Model.FriendsWith == false && Model.Requested == true && Model.Requester == false)
+        {
+            @Html.Raw("You sent a friend request.")
+        }
+        else if (Model.FriendsWith == false && Model.Requested == false && Model.Requester == true)
+        {
+            <span class="@String.Concat("request",Model.UserName)">
+                <a class="btn btn-default" href="#" onclick="acceptrequest('@Model.UserName')" role="button">Accept friend request</a> <a class="btn btn-default" href="#" onclick="rejectrequest('@Model.UserName')" role="button">Reject</a>
+            </span>
+        }
+    </div>
+</div>
+
+@foreach (var item in Model.Posts)
+{
+    var id = Guid.Parse(((ClaimsIdentity)User.Identity).FindFirst("id").Value);
+    var count = Html.Action("LikeCount", "Post", new { id = item.PostID }).ToString();
+    <div class="panel panel-default" id="@item.PostID" data-toggle="modal" data-target="#myModal" style="cursor:pointer" onclick="loadajax(@item.PostID)">
+        <div class="panel-body">
+            <div class="media">
+                <div class="media-left">
+                    <a href="@Url.Action("Index/" + item.UserName, "Profile")">
+                        @Html.Action("_ProfilePicture", "Home", new { id = item.AccountID.ToString() })
+                    </a>
+                </div>
+                <div class="media-body">
+
+                    <h4 class="media-heading">
+                        @Html.ActionLink(item.FullName, "Index/" + item.UserName, "Profile")
+                    </h4>
+
+                    <div class="post" id="@String.Concat("postcontent",item.PostID)">@Html.DisplayFor(modelItem => item.PostContent)</div>
+
+                    <div class="well-sm">
+                        @Html.DisplayFor(modelItem => item.DateCreated) |
+                        @if (Html.Action("CheckLike", "Post", new { id = item.PostID }).ToString() == "1")
+                        {
+                            <a href="#" id="@String.Concat("likes",item.PostID)" onclick="unlike(@item.PostID)" data-toggle="popover" data-html="true" onmouseover="getlikers(@item.PostID)" onmouseout="hidepopover(@item.PostID)">Unlike</a>
+                        }
+                        else
+                        {
+                            <a href="#" id="@String.Concat("likes",item.PostID)" onclick="like(@item.PostID)" data-toggle="popover" data-html="true" onmouseover="getlikers(@item.PostID)" onmouseout="hidepopover(@item.PostID)">Like</a>
+                        }
+
+                        <span id="@String.Concat("likescount",item.PostID)" class="badge">@if (count != "0"){@count}</span>
+
+                    @if (item.AccountID == id)
+                    {
+                        <a href="#" onclick="editpost(@item.PostID)">Edit</a>
+                        @Html.Raw(" | ")
+                        <a href="#" onclick="showdeletemodal(@item.PostID)">Delete</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}

@@ -1,0 +1,44 @@
+﻿@model SocialWebsiteMVC5.Comment
+
+@using (Html.BeginForm("_comment", "Post", FormMethod.Post, new {id = "formComment" }))
+{
+    @Html.AntiForgeryToken()
+    
+    @Html.HiddenFor(model => model.PostID)
+    <div class="form-inline">
+        
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="col-lg-6">
+            <div class="input-group">
+            @Html.EditorFor(model => model.CommentContent, new { htmlAttributes = new { @class = "form-control", @placeholder = "comment"} })
+               
+                <span class="input-group-btn">
+                    @*<button class="btn btn-default" >Go!</button>*@
+                    <a href="#" class="btn btn-default" role="button" onclick="comment()">Comment</a>
+                </span>
+            </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+    
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+    function comment() {
+        var form = $('#formComment');
+        var token = $('input[name="__RequestVerificationToken"]', form).val();
+        var id = $('input[name="PostID"]', form).val();
+        var content = $('input[name="CommentContent"]', form).val();
+        $.ajax({
+            url: "/Post/_comment/",
+            type: "Post",
+            data: {
+                __RequestVerificationToken: token,
+                PostID: id,
+                CommentContent: content
+            }
+        }).done(loadajax(id))
+    }
+</script>

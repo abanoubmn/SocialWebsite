@@ -1,0 +1,14 @@
+﻿@model SocialWebsiteMVC5.ProfilePicture
+
+@if (Model == null)
+{
+
+    <img class="img-thumbnail media-object" src="~/images/empty.gif" height="80" width="80" />
+
+}
+else
+{
+
+    <img class="img-thumbnail media-object" src="@Model.ImageURL" height="80" width="80" />
+
+}
