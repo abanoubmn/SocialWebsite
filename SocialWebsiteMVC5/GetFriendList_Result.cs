@@ -15,5 +15,7 @@ namespace SocialWebsiteMVC5
     {
         public string FullName { get; set; }
         public string UserName { get; set; }
+        public System.Guid ID { get; set; }
+        public string ImageURL { get; set; }
     }
 }

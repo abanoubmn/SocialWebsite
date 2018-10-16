@@ -1,0 +1,29 @@
+﻿@model IEnumerable<SocialWebsiteMVC5.GetFriendList_Result>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4">
+            <div class="thumbnail">
+                @if (item.ImageURL != null)
+                {
+                    <img class="img-rounded" src="@item.ImageURL" height="200" width="200">
+                }
+                else
+                {
+                    <img class="img-rounded" src="~/images/empty.gif" height="200" width="200" />
+                }
+
+                <div class="caption">
+                    <h3>@Html.ActionLink(item.FullName, "Index/" + item.UserName, "Profile")</h3>
+
+                </div>
+            </div>
+        </div>
+
+    }
+</div>

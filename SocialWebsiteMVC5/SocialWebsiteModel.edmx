@@ -220,7 +220,7 @@
           <Parameter Name="postId" Type="int" Mode="In" />
         </Function>
         <Function Name="GetFriendList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="accountId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="accountID" Type="uniqueidentifier" Mode="In" />
         </Function>
         <Function Name="GetLikers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="postId" Type="int" Mode="In" />
@@ -548,7 +548,7 @@
             <Parameter Name="postId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetFriendList" ReturnType="Collection(SocialWebsiteModel.GetFriendList_Result)">
-            <Parameter Name="accountId" Mode="In" Type="Guid" />
+            <Parameter Name="accountID" Mode="In" Type="Guid" />
           </FunctionImport>
           <FunctionImport Name="GetLikers" ReturnType="Collection(SocialWebsiteModel.GetLikers_Result)">
             <Parameter Name="postId" Mode="In" Type="Int32" />
@@ -598,6 +598,8 @@
         <ComplexType Name="GetFriendList_Result">
           <Property Type="String" Name="FullName" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="UserName" Nullable="false" MaxLength="50" />
+          <Property Type="Guid" Name="ID" Nullable="false" />
+          <Property Type="String" Name="ImageURL" Nullable="true" />
         </ComplexType>
         <ComplexType Name="GetLikers_Result">
           <Property Type="String" Name="FullName" Nullable="false" MaxLength="50" />
@@ -738,6 +740,8 @@
               <ComplexTypeMapping TypeName="SocialWebsiteModel.GetFriendList_Result">
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

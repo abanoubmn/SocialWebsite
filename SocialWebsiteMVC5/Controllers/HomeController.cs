@@ -37,7 +37,7 @@ namespace SocialWebsiteMVC5.Controllers
             return View("Index1", MyData);
         }
 
-        //[Authorize]
+        [Authorize]
         [ChildActionOnly]
         public ActionResult _Requests()
         {

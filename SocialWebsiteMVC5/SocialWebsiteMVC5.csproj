@@ -159,7 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.cs">
-      <DependentUpon>SocialWebsiteEntities.tt</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.tt</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -167,72 +167,73 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Comment.cs">
-      <DependentUpon>SocialWebsiteEntities.tt</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.tt</DependentUpon>
     </Compile>
     <Compile Include="CommentsAndPostID.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\FriendsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\SWApiController.cs" />
     <Compile Include="Encryptor.cs" />
     <Compile Include="Friend.cs">
-      <DependentUpon>SocialWebsiteEntities.tt</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.tt</DependentUpon>
     </Compile>
     <Compile Include="FriendRequestsAndPosts.cs" />
     <Compile Include="GetAllPosts_Result.cs">
-      <DependentUpon>SocialWebsiteEntities.tt</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.tt</DependentUpon>
     </Compile>
     <Compile Include="GetComments_Result.cs">
-      <DependentUpon>SocialWebsiteEntities.tt</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.tt</DependentUpon>
     </Compile>
     <Compile Include="GetFriendList_Result.cs">
-      <DependentUpon>SocialWebsiteEntities.tt</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.tt</DependentUpon>
     </Compile>
     <Compile Include="GetLikers_Result.cs">
-      <DependentUpon>SocialWebsiteEntities.tt</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.tt</DependentUpon>
     </Compile>
     <Compile Include="GetProfileData_Result.cs">
-      <DependentUpon>SocialWebsiteEntities.tt</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="InsertPost_Result.cs">
-      <DependentUpon>SocialWebsiteEntities.tt</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\PartialClasses.cs" />
     <Compile Include="Post.cs">
-      <DependentUpon>SocialWebsiteEntities.tt</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PostsAndProfilePicture.cs" />
     <Compile Include="ProfilePicture.cs">
-      <DependentUpon>SocialWebsiteEntities.tt</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request.cs">
-      <DependentUpon>SocialWebsiteEntities.tt</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Search.cs" />
     <Compile Include="SearchAccounts_Result.cs">
-      <DependentUpon>SocialWebsiteEntities.tt</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="SocialWebsiteEntities.Context.cs">
+    <Compile Include="SocialWebsiteModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SocialWebsiteEntities.Context.tt</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="SocialWebsiteEntities.cs">
+    <Compile Include="SocialWebsiteModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SocialWebsiteEntities.tt</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="SocialWebsiteEntities.Designer.cs">
+    <Compile Include="SocialWebsiteModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SocialWebsiteEntities.edmx</DependentUpon>
+      <DependentUpon>SocialWebsiteModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -284,15 +285,15 @@
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="SocialWebsiteEntities.Context.tt">
+    <Content Include="SocialWebsiteModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SocialWebsiteEntities.edmx</DependentUpon>
-      <LastGenOutput>SocialWebsiteEntities.Context.cs</LastGenOutput>
+      <DependentUpon>SocialWebsiteModel.edmx</DependentUpon>
+      <LastGenOutput>SocialWebsiteModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="SocialWebsiteEntities.tt">
+    <Content Include="SocialWebsiteModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SocialWebsiteEntities.edmx</DependentUpon>
-      <LastGenOutput>SocialWebsiteEntities.cs</LastGenOutput>
+      <DependentUpon>SocialWebsiteModel.edmx</DependentUpon>
+      <LastGenOutput>SocialWebsiteModel.cs</LastGenOutput>
     </Content>
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -327,12 +328,13 @@
     <Content Include="Views\Post\Comments.cshtml" />
     <Content Include="Views\Post\_Posts.cshtml" />
     <Content Include="Views\Post\InsertPost.cshtml" />
-    <EntityDeploy Include="SocialWebsiteEntities.edmx">
+    <Content Include="Views\Friends\Index.cshtml" />
+    <EntityDeploy Include="SocialWebsiteModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SocialWebsiteEntities.Designer.cs</LastGenOutput>
+      <LastGenOutput>SocialWebsiteModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="SocialWebsiteEntities.edmx.diagram">
-      <DependentUpon>SocialWebsiteEntities.edmx</DependentUpon>
+    <Content Include="SocialWebsiteModel.edmx.diagram">
+      <DependentUpon>SocialWebsiteModel.edmx</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>

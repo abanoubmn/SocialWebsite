@@ -121,13 +121,13 @@ namespace SocialWebsiteMVC5
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetComments_Result>("GetComments", postIdParameter);
         }
     
-        public virtual ObjectResult<GetFriendList_Result> GetFriendList(Nullable<System.Guid> accountId)
+        public virtual ObjectResult<GetFriendList_Result> GetFriendList(Nullable<System.Guid> accountID)
         {
-            var accountIdParameter = accountId.HasValue ?
-                new ObjectParameter("accountId", accountId) :
-                new ObjectParameter("accountId", typeof(System.Guid));
+            var accountIDParameter = accountID.HasValue ?
+                new ObjectParameter("accountID", accountID) :
+                new ObjectParameter("accountID", typeof(System.Guid));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetFriendList_Result>("GetFriendList", accountIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetFriendList_Result>("GetFriendList", accountIDParameter);
         }
     
         public virtual ObjectResult<GetLikers_Result> GetLikers(Nullable<int> postId)

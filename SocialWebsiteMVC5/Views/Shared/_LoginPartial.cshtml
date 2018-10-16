@@ -19,7 +19,7 @@
                 <a href="@Url.Action()" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hello @User.Identity.GetUserName()!</a>
                 <ul class="dropdown-menu">
                     <li><a>Settings</a></li>
-                    <li><a>Friends</a></li>
+                    <li>@Html.ActionLink("Friends","","Friends")</li>
                 </ul>
             </li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
