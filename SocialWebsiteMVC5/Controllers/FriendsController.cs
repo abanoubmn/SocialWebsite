@@ -16,7 +16,6 @@ namespace SocialWebsiteMVC5.Controllers
         {
             var identity = (ClaimsIdentity)User.Identity;
             var id = Guid.Parse(identity.FindFirst("id").Value);
-            
             return View(db.GetFriendList(id));
         }
     }
