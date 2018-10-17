@@ -1,2 +1,2 @@
 # SocialWebsite
-Run Database script first before building the solution
+Restore Database backup first before building the solution
