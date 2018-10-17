@@ -8,7 +8,15 @@
     {
         <div class="col-md-4">
             <div class="thumbnail">
-                <img class="img-rounded" src="@item.ImageURL" height="200" width="200">
+                @if (item.ImageURL != null)
+                {
+                    <img class="img-rounded" src="@item.ImageURL" height="200" width="200">
+                }
+                else
+                {
+                    <img class="img-rounded" src="~/images/empty.gif" height="200" width="200">
+                }
+
                 <div class="caption">
                     <h3>@Html.ActionLink(item.FullName, "Index/" + item.UserName, "Profile")</h3>
                     <p></p>
@@ -25,7 +33,7 @@
                         }
                         else
                         {
-                            <p> @Html.Raw(item.FullName+" sent a friend request.") </p>
+                            <p> @Html.Raw(item.FullName + " sent a friend request.") </p>
                         }
 
                     }
@@ -39,24 +47,24 @@
 <script>
 
 
-            //$(document).on("click", function (e) {
-            //    var elem = e.target;
-            //    if (elem.nodeName == 'A') {
-            //        var p = elem.parentElement;
-            //        $.ajax({
-            //            url: "/Profile/Add/",
-            //            type: "Post",
-            //            data: {
-            //                RequestedUsername: p.id
-            //            }
-            //        }).done(function (result) {
-            //            if (result == "succeeded") {
-            //                $("#" + p.id).html("Friend request was sent successfully!")
-            //            }
-            //            else if (result == "failed") {
-            //                $("#" + p.id).html("Friend request failed!")
-            //            }
-            //        })
-            //    }
-            //});
+                //$(document).on("click", function (e) {
+                //    var elem = e.target;
+                //    if (elem.nodeName == 'A') {
+                //        var p = elem.parentElement;
+                //        $.ajax({
+                //            url: "/Profile/Add/",
+                //            type: "Post",
+                //            data: {
+                //                RequestedUsername: p.id
+                //            }
+                //        }).done(function (result) {
+                //            if (result == "succeeded") {
+                //                $("#" + p.id).html("Friend request was sent successfully!")
+                //            }
+                //            else if (result == "failed") {
+                //                $("#" + p.id).html("Friend request failed!")
+                //            }
+                //        })
+                //    }
+                //});
 </script>

@@ -259,7 +259,6 @@
     <Content Include="Images\empty.gif" />
     <Content Include="Images\f53a8ae1-f32b-4403-b87b-2ebe404d11abFront.jpg" />
     <Content Include="Images\front.jpg" />
-    <Content Include="DatabaseScript.sql" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
@@ -336,6 +335,7 @@
     <Content Include="SocialWebsiteModel.edmx.diagram">
       <DependentUpon>SocialWebsiteModel.edmx</DependentUpon>
     </Content>
+    <Content Include="SocialWebsite.bak" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
